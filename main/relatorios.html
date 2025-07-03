@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Gestor CPP RJ</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Reutilizados */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .header-title span, .header-title a {
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        
+        .header-title a:hover {
+            color: #3b82f6;
+        }
+
+        .logout-button {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #e5e7eb;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            background-color: white;
+        }
+        
+        /* Estilos Específicos */
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .form-container {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 30px;
+            }
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: white;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            grid-column: 1 / -1;
+        }
+        
+        .generate-button {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            background-color: #10b981;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        
+        .generate-button:hover {
+            background-color: #059669;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <div class="header-title">
+                <a href="painel_admin.html">Painel do Administrador</a> / <span>Relatórios</span>
+            </div>
+            <a href="login.html" class="logout-button">Sair</a>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Relatórios e Exportação</h1>
+                <p>Use os filtros abaixo para gerar relatórios de frequência e dados do sistema.</p>
+            </div>
+
+            <div class="form-container">
+                <form action="#/relatorios/gerar" method="post">
+                    <div class="form-grid">
+                        
+                        <div class="form-group full-width">
+                            <label for="tipo-relatorio">Tipo de Relatório</label>
+                             <select id="tipo-relatorio" name="tipo-relatorio" required>
+                                <option value="presenca">Lista de Presença por Turma</option>
+                                <option value="frequencia_aluno">Frequência por Aluno</option>
+                                <option value="lista_alunos">Lista de Alunos por Turma</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="turma">Filtrar por Turma (Obrigatório para alguns relatórios)</label>
+                             <select id="turma" name="turma">
+                                <option value="" selected>Todas as turmas</option>
+                                <option value="turma_1">Jiu-Jitsu (UPP Rocinha)</option>
+                                <option value="turma_2">Reforço Escolar (UPP Alemão)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data-inicio">Período - Data de Início</label>
+                            <input type="date" id="data-inicio" name="data-inicio">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data-fim">Período - Data Final</label>
+                            <input type="date" id="data-fim" name="data-fim">
+                        </div>
+                        
+                         <div class="form-group">
+                            <label for="formato">Formato de Exportação</label>
+                             <select id="formato" name="formato" required>
+                                <option value="pdf">PDF</option>
+                                <option value="csv">Excel (CSV)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="generate-button">Gerar Relatório</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+        
+        <!-- RODAPÉ -->
+        <footer class="footer">
+            &copy; 2025 CPP RJ - Todos os direitos reservados.
+        </footer>
+    </div>
+
+</body>
+</html>
