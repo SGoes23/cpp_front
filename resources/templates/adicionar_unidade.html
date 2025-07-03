@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Nova Unidade - Gestor CPP RJ</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Reutilizados */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .header-title span, .header-title a {
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        
+        .header-title a:hover {
+            color: #3b82f6;
+        }
+
+        .logout-button {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #e5e7eb;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            background-color: white;
+        }
+        
+        /* Estilos do Formulário */
+        .form-container {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .form-header p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        }
+        
+        .save-button {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .cancel-button {
+            background-color: #f3f4f6;
+            color: #374151;
+            border-color: #d1d5db;
+        }
+
+        .cancel-button:hover {
+            background-color: #e5e7eb;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <div class="header-title">
+                <a href="painel-admin">Painel do Administrador</a> / <a href="gerir_unidades.html">Gerir Unidades</a> / <span>Adicionar Unidade</span>
+            </div>
+            <a href="login.html" class="logout-button">Sair</a>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h1>Adicionar Nova Unidade</h1>
+                    <p>Preencha os dados abaixo para registar uma nova unidade no sistema.</p>
+                </div>
+
+                <form th:action="@{/unidades/salvar}" method="post" th:object="${unidade}">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="nome">Nome da Unidade</label>
+                            <input type="text" id="nome" name="nome" placeholder="Ex: UPP Rocinha" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Ex: Estrada da Gávea, 123" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coordenador">Nome do Coordenador</label>
+                            <input type="text" id="coordenador" name="coordenador" placeholder="Ex: Capitão Silva" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone">Telefone de Contato</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" maxlength="15">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="email">E-mail de Contato</label>
+                            <input type="email" id="email" name="email" placeholder="contato.unidade@cpp.rj.gov.br">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="gerir_unidades.html" class="action-button cancel-button">Cancelar</a>
+                        <button type="submit" class="action-button save-button">Salvar Unidade</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        
+        <!-- RODAPÉ -->
+        <footer class="footer">
+            &copy; 2025 CPP RJ - Todos os direitos reservados.
+        </footer>
+    </div>
+    
+    <!-- SCRIPT PARA MÁSCARA DE TELEFONE -->
+    <script>
+        // Seleciona o campo de input do telefone pelo seu ID
+        const phoneInput = document.getElementById('telefone');
+
+        // Adiciona um 'escutador' de eventos que é acionado a cada vez que o usuário digita algo
+        phoneInput.addEventListener('input', (e) => {
+            // Pega o valor atual do campo e remove tudo que não for número
+            let value = e.target.value.replace(/\D/g, '');
+
+            // Se o valor estiver vazio, não faz nada
+            if (value.length === 0) {
+                e.target.value = '';
+                return;
+            }
+
+            // Aplica a formatação (XX) XXXXX-XXXX
+            if (value.length <= 2) {
+                e.target.value = `(${value}`;
+            } else if (value.length <= 7) {
+                e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+            } else {
+                e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

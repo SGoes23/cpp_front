@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor CPP RJ - Login</title>
+
+    <!-- Google Fonts: Importando a fonte 'Inter' para um visual mais moderno -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos CSS incorporados diretamente no HTML para simplicidade -->
+    <style>
+        /* Reset básico e definição da fonte principal */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Um cinza claro para o fundo */
+        }
+
+        /* Container principal para centralizar o cartão de login na tela */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        /* O cartão de login */
+        .login-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+            margin: 20px;
+        }
+
+        /* Cabeçalho com o logo e o título */
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e5e7eb; /* Fundo do ícone */
+            margin-bottom: 15px;
+            /* SVG do escudo embutido */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 60%;
+        }
+
+        .card-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: #1f2937;
+        }
+
+        .card-header p {
+            font-size: 16px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        /* Estilos para os campos do formulário */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-sizing: border-box; /* Importante para o padding não quebrar o layout */
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6; /* Borda azul ao focar */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Botão de login */
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb; /* Azul do botão */
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .login-button:hover {
+            background-color: #1d4ed8; /* Azul mais escuro ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="card-header">
+                <div class="logo-icon"></div>
+                <h1>Gestor de Projetos</h1>
+                <p>CPP RJ</p>
+            </div>
+
+            <!-- O formulário de login em si. A action será o endpoint no seu servidor Java no futuro. -->
+            <form action="#/login" method="post">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu.email@policiamilitar.rj.gov.br" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="************" required>
+                </div>
+                <button type="submit" class="login-button">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

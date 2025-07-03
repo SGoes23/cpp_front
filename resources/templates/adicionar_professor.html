@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Novo Professor - Gestor CPP RJ</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Reutilizados */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1f2937; }
+        .dashboard-container { display: flex; flex-direction: column; min-height: 100vh; }
+        .header { background-color: white; padding: 15px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+        .header-title { font-size: 22px; font-weight: 700; }
+        .header-title span, .header-title a { font-weight: 500; color: #6b7280; text-decoration: none; }
+        .header-title a:hover { color: #3b82f6; }
+        .logout-button { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; transition: background-color 0.2s, color 0.2s; }
+        .logout-button:hover { background-color: #e5e7eb; }
+        .main-content { flex: 1; padding: 40px; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; background-color: white; }
+        .form-container { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 30px 40px; max-width: 800px; margin: 0 auto; }
+        .form-header { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+        .form-header h1 { font-size: 24px; font-weight: 700; margin: 0; }
+        .form-header p { font-size: 14px; color: #6b7280; margin-top: 5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; gap: 30px; } .full-width { grid-column: 1 / -1; } }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: 'Inter', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; background-color: white; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3); }
+        .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; }
+        .action-button { padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; border: 1px solid transparent; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+        .save-button { background-color: #2563eb; color: white; }
+        .save-button:hover { background-color: #1d4ed8; }
+        .cancel-button { background-color: #f3f4f6; color: #374151; border-color: #d1d5db; }
+        .cancel-button:hover { background-color: #e5e7eb; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header class="header">
+        <div class="header-title">
+            <a th:href="@{/painel-admin}">Painel do Administrador</a> / <a th:href="@{/professores}">Gerir Professores</a> / <span>Adicionar Professor</span>
+        </div>
+        <a th:href="@{/login.html}" class="logout-button">Sair</a>
+    </header>
+
+    <main class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Adicionar Novo Professor</h1>
+                <p>Preencha os dados abaixo para registar um novo professor no sistema.</p>
+            </div>
+
+            <form th:action="@{/professores/salvar}" th:object="${professor}" method="post">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" th:field="*{nomeCompleto}" placeholder="Nome completo do instrutor" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rg">RG</label>
+                        <input type="text" id="rg" th:field="*{rg}" placeholder="00.000.000-0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" th:field="*{telefone}" placeholder="(XX) XXXXX-XXXX" maxlength="15">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="email">E-mail (para login)</label>
+                        <input type="email" id="email" th:field="*{email}" placeholder="email.login@policiamilitar.rj.gov.br" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="unidade">Unidade de Lotação</label>
+                        <select id="unidade" th:field="*{unidade}" required>
+                            <option value="" disabled selected>Selecione a unidade</option>
+                            <!-- O Thymeleaf irá repetir esta linha para cada unidade na lista "unidades" -->
+                            <option th:each="unidadeOpt : ${unidades}"
+                                    th:value="${unidadeOpt.id}"
+                                    th:text="${unidadeOpt.nome}">UPP Rocinha</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha de Acesso</label>
+                        <input type="password" id="senha" th:field="*{senha}" placeholder="Crie uma senha forte" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a th:href="@{/professores}" class="action-button cancel-button">Cancelar</a>
+                    <button type="submit" class="action-button save-button">Salvar Professor</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; 2025 CPP RJ - Todos os direitos reservados.
+    </footer>
+</div>
+
+<script>
+    const phoneInput = document.getElementById('telefone');
+    phoneInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length === 0) { e.target.value = ''; return; }
+        if (value.length <= 2) { e.target.value = `(${value}`; }
+        else if (value.length <= 7) { e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`; }
+        else { e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`; }
+    });
+</script>
+
+</body>
+</html>

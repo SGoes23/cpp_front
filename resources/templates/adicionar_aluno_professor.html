@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Novo Aluno - Gestor CPP RJ</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Reutilizados */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1f2937; }
+        .dashboard-container { display: flex; flex-direction: column; min-height: 100vh; }
+        .header { background-color: white; padding: 15px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+        .header-title { font-size: 22px; font-weight: 700; }
+        .header-title span, .header-title a { font-weight: 500; color: #6b7280; text-decoration: none; }
+        .header-title a:hover { color: #3b82f6; }
+        .logout-button { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; }
+        .main-content { flex: 1; padding: 40px; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; background-color: white; }
+        .form-container { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 30px 40px; max-width: 800px; margin: 0 auto; }
+        .form-header { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+        .form-header h1 { font-size: 24px; font-weight: 700; margin: 0; }
+        .form-header p { font-size: 14px; color: #6b7280; margin-top: 5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .form-grid { grid-template-columns: auto 1fr; gap: 40px; align-items: flex-start; } .full-width { grid-column: 1 / -1; } }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: 'Inter', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; background-color: white; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3); }
+        .photo-upload-container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .photo-preview { width: 128px; height: 128px; border-radius: 50%; border: 3px solid #e5e7eb; background-color: #f3f4f6; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; color: #9ca3af; }
+        .photo-preview .icon { width: 48px; height: 48px; stroke-width: 1; }
+        .upload-button { font-size: 14px; font-weight: 500; color: #3b82f6; cursor: pointer; text-decoration: underline; }
+        #foto-aluno { display: none; }
+        .form-fields { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .form-fields { grid-template-columns: 1fr 1fr; gap: 30px; } }
+        .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; grid-column: 1 / -1; }
+        .action-button { padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
+        .save-button { background-color: #2563eb; color: white; }
+        .cancel-button { background-color: #f3f4f6; color: #374151; border-color: #d1d5db; }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="header">
+        <div class="header-title">
+            <a th:href="@{/professor/painel}">Painel do Professor</a> / <span>Cadastrar Aluno</span>
+        </div>
+        <a th:href="@{/login.html}" class="logout-button">Sair</a>
+    </header>
+
+    <main class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Cadastrar Novo Aluno</h1>
+                <p>Preencha os dados para registar um novo aluno na sua unidade.</p>
+            </div>
+
+            <form th:action="@{/professor/alunos/salvar}" th:object="${aluno}" method="post" enctype="multipart/form-data">
+                <!-- O ID da unidade do professor será enviado como um campo oculto -->
+                <input type="hidden" name="unidadeId" th:value="${unidadeProfessor.id}" />
+
+                <div class="form-grid">
+                    <div class="photo-upload-container">
+                        <label>Foto do Aluno</label>
+                        <div id="photo-preview" class="photo-preview">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                        </div>
+                        <label for="foto-aluno" class="upload-button">Escolher foto</label>
+                        <input type="file" id="foto-aluno" name="foto-aluno" accept="image/*">
+                    </div>
+
+                    <div class="form-fields">
+                        <div class="form-group full-width">
+                            <label for="nome-aluno">Nome Completo do Aluno</label>
+                            <input type="text" id="nome-aluno" th:field="*{nomeCompleto}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data-nascimento">Data de Nascimento</label>
+                            <input type="date" id="data-nascimento" th:field="*{dataNascimento}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rg-cpf">RG ou CPF do Aluno</label>
+                            <input type="text" id="rg-cpf" th:field="*{rgOuCpf}" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" th:field="*{endereco}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome-responsavel">Nome do Responsável</label>
+                            <input type="text" id="nome-responsavel" th:field="*{nomeResponsavel}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone-responsavel">Telefone do Responsável</label>
+                            <input type="tel" id="telefone-responsavel" th:field="*{telefoneResponsavel}" maxlength="15" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Unidade de Cadastro</label>
+                            <input type="text" th:value="${unidadeProfessor.nome}" disabled style="background-color: #e5e7eb;">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a th:href="@{/professor/painel}" class="action-button cancel-button">Cancelar</a>
+                        <button type="submit" class="action-button save-button">Salvar Aluno</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; 2025 CPP RJ - Todos os direitos reservados.
+    </footer>
+</div>
+
+<script>
+    const phoneInput = document.getElementById('telefone-responsavel');
+    phoneInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length === 0) { e.target.value = ''; return; }
+        if (value.length <= 2) { e.target.value = `(${value}`; }
+        else if (value.length <= 7) { e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`; }
+        else { e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`; }
+    });
+
+    const photoInput = document.getElementById('foto-aluno');
+    const photoPreview = document.getElementById('photo-preview');
+    photoInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                photoPreview.style.backgroundImage = `url('${event.target.result}')`;
+                photoPreview.innerHTML = '';
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+</script>
+
+</body>
+</html>
