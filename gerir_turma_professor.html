@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerir Turma - Gestor CPP RJ</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Reutilizados */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1f2937; }
+        .dashboard-container { display: flex; flex-direction: column; min-height: 100vh; }
+        .header { background-color: white; padding: 15px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+        .header-title { font-size: 22px; font-weight: 700; }
+        .header-title span, .header-title a { font-weight: 500; color: #6b7280; text-decoration: none; }
+        .header-title a:hover { color: #3b82f6; }
+        .logout-button { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; }
+        .main-content { flex: 1; padding: 40px; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; }
+        .page-layout { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+        @media (min-width: 1024px) { .page-layout { grid-template-columns: 2fr 1fr; } }
+        .content-card { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 30px; }
+        .card-header { padding-bottom: 15px; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+        .card-header h1 { font-size: 24px; font-weight: 700; margin: 0; }
+        .card-header p { font-size: 16px; color: #6b7280; margin-top: 5px; }
+        .attendance-form .form-group { margin-bottom: 20px; }
+        .attendance-form label { font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; display: block; }
+        .attendance-form input[type="date"] { padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+        .student-list { list-style: none; padding: 0; margin: 0; }
+        .student-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 10px; border-bottom: 1px solid #f3f4f6; }
+        .student-item:last-child { border-bottom: none; }
+        .student-info { display: flex; align-items: center; gap: 15px; }
+        .student-photo { width: 40px; height: 40px; border-radius: 50%; background-color: #e5e7eb; background-size: cover; background-position: center; }
+        .student-name { font-weight: 500; }
+        .presence-checkbox { transform: scale(1.5); accent-color: #2563eb; }
+        .form-actions { margin-top: 30px; text-align: right; }
+        .action-button { padding: 12px 25px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; text-decoration: none; border: 1px solid transparent; background-color: #2563eb; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- CABEÇALHO -->
+    <header class="header">
+        <div class="header-title">
+            <!-- LINK CORRIGIDO -->
+            <a th:href="@{/professor/painel}">Painel do Professor</a> / <span>Gerir Turma</span>
+        </div>
+        <a th:href="@{/login.html}" class="logout-button">Sair</a>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+        <div class="page-layout">
+
+            <!-- Coluna da Lista de Presença -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h1 th:text="${'Gerir Turma: ' + turma.atividade.nome}">Gerir Turma: Aulas de Jiu-Jitsu</h1>
+                    <p th:text="${turma.unidade.nome}">UPP Rocinha</p>
+                </div>
+
+                <form class="attendance-form" th:action="@{/professor/turma/{id}/presenca/salvar(id=${turma.id})}" method="post">
+                    <div class="form-group">
+                        <label for="data-aula">Data da Aula</label>
+                        <input type="date" id="data-aula" name="data-aula" required>
+                    </div>
+
+                    <hr style="border: 1px solid #f3f4f6; margin: 25px 0;">
+
+                    <ul class="student-list">
+                        <li class="student-item" th:each="aluno : ${turma.alunos}">
+                            <div class="student-info">
+                                <div class="student-photo" th:style="'background-image: url(' + @{${aluno.fotoPath != null ? aluno.fotoPath : '/placehold.co/80x80/EFEFEF/333333?text=S/F'}} + ');'"></div>
+                                <span class="student-name" th:text="${aluno.nomeCompleto}">Nome do Aluno</span>
+                            </div>
+                            <input type="checkbox" name="presenca" th:value="${aluno.id}" class="presence-checkbox">
+                        </li>
+                    </ul>
+
+                    <div class="form-actions">
+                        <button type="submit" class="action-button">Salvar Presença</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Coluna Lateral para Adicionar Alunos -->
+            <aside class="content-card" style="height: fit-content;">
+                <div class="card-header">
+                    <h2>Adicionar Aluno à Turma</h2>
+                </div>
+                <form th:action="@{/professor/turma/{id}/adicionar_aluno(id=${turma.id})}" method="post">
+                    <div class="form-group">
+                        <label for="search-aluno">Buscar Aluno (por nome ou CPF)</label>
+                        <input type="search" id="search-aluno" name="search-aluno" placeholder="Digite para buscar...">
+                    </div>
+                    <div class="form-actions" style="justify-content: flex-end; border-top:none; padding-top:0;">
+                        <button type="submit" class="action-button" style="background-color: #10b981;">Adicionar</button>
+                    </div>
+                </form>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; 2025 CPP RJ - Todos os direitos reservados.
+    </footer>
+</div>
+<script>
+    document.getElementById('data-aula').valueAsDate = new Date();
+</script>
+</body>
+</html>
